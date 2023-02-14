@@ -2,7 +2,7 @@ import { connectApi } from "./connectApi.js";
 
 const list = document.querySelector("[data-list]");
 
-function buildCard(title, description, image, url) {
+export default function buildCard(title, description, image, url) {
   const video = document.createElement("li");
   video.className = "videos__item";
   video.innerHTML = ` 
@@ -20,12 +20,21 @@ function buildCard(title, description, image, url) {
 
 //acessando o retorno da função que conecta na API
 async function listVideo() {
-  const APIList = await connectApi.apiConnection();
-  APIList.forEach((element) =>
-    list.appendChild(
-      buildCard(element.titulo, element.descricao, element.imagem, element.url)
-    )
-  );
+  try {
+    const APIList = await connectApi.apiConnection();
+    APIList.forEach((element) =>
+      list.appendChild(
+        buildCard(
+          element.titulo,
+          element.descricao,
+          element.imagem,
+          element.url
+        )
+      )
+    );
+  } catch {
+    list.innerHTML = `<h2 class="mensagem__titulo">Não foi possível carregar o vídeo</h2>`;
+  }
 }
 
 listVideo();
